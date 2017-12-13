@@ -1,6 +1,5 @@
 D:\Documents_HWY\C#\Welcome\Welcome\obj\Debug\Welcome.csprojResolveAssemblyReference.cache
 D:\Documents_HWY\C#\Welcome\Welcome\obj\Debug\Welcome.csproj.Welcome.exe.config
-D:\Documents_HWY\C#\Welcome\Welcome\obj\Debug\Welcome.AdminForm.resources
 D:\Documents_HWY\C#\Welcome\Welcome\obj\Debug\Welcome.Properties.Resources.resources
 D:\Documents_HWY\C#\Welcome\Welcome\obj\Debug\Welcome.csproj.GenerateResource.Cache
 D:\Documents_HWY\C#\Welcome\Welcome\bin\Debug\Welcome.exe.config
@@ -17,3 +16,4 @@ D:\Documents_HWY\C#\Welcome\Welcome\bin\Debug\MySQL.Data.EntityFrameworkCore.xml
 D:\Documents_HWY\C#\Welcome\Welcome\bin\Debug\MySql.Web.xml
 D:\Documents_HWY\C#\Welcome\Welcome\obj\Debug\Welcome.exe
 D:\Documents_HWY\C#\Welcome\Welcome\obj\Debug\Welcome.pdb
+D:\Documents_HWY\C#\Welcome\Welcome\obj\Debug\Welcome.AdminForm.resources
