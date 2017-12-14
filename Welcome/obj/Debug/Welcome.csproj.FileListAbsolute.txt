@@ -5,11 +5,6 @@ D:\Documents_HWY\C#\Welcome\Welcome\obj\Debug\Welcome.csproj.GenerateResource.Ca
 D:\Documents_HWY\C#\Welcome\Welcome\bin\Debug\Welcome.exe.config
 D:\Documents_HWY\C#\Welcome\Welcome\bin\Debug\Welcome.exe
 D:\Documents_HWY\C#\Welcome\Welcome\bin\Debug\Welcome.pdb
-D:\Documents_HWY\C#\Welcome\Welcome\bin\Debug\MySql.Data.dll
-D:\Documents_HWY\C#\Welcome\Welcome\bin\Debug\MySql.Data.Entity.EF6.dll
-D:\Documents_HWY\C#\Welcome\Welcome\bin\Debug\MySQL.Data.EntityFrameworkCore.Design.dll
-D:\Documents_HWY\C#\Welcome\Welcome\bin\Debug\MySQL.Data.EntityFrameworkCore.dll
-D:\Documents_HWY\C#\Welcome\Welcome\bin\Debug\MySql.Web.dll
 D:\Documents_HWY\C#\Welcome\Welcome\bin\Debug\MySql.Data.xml
 D:\Documents_HWY\C#\Welcome\Welcome\bin\Debug\MySql.Data.Entity.EF6.xml
 D:\Documents_HWY\C#\Welcome\Welcome\bin\Debug\MySQL.Data.EntityFrameworkCore.xml
@@ -17,3 +12,5 @@ D:\Documents_HWY\C#\Welcome\Welcome\bin\Debug\MySql.Web.xml
 D:\Documents_HWY\C#\Welcome\Welcome\obj\Debug\Welcome.exe
 D:\Documents_HWY\C#\Welcome\Welcome\obj\Debug\Welcome.pdb
 D:\Documents_HWY\C#\Welcome\Welcome\obj\Debug\Welcome.AdminForm.resources
+D:\Documents_HWY\C#\Welcome\Welcome\obj\Debug\Welcome.InputBox.resources
+D:\Documents_HWY\C#\Welcome\Welcome\obj\Debug\Welcome.csproj.ResolveComReference.cache
