@@ -235,17 +235,24 @@ namespace Welcome
         bool PasInput = false;
         private void deletePerson()
         {
-            DialogResult re = MessageBox.Show("确定删除:" + tbxName.Text + "?", "提示", MessageBoxButtons.OKCancel);
-            if(re == DialogResult.OK)
+            if(tbxId.Text != "" && tbxName.Text != "")
             {
-                myConn.Open();
-                string sqlCmd = "delete from newperson where Id = '" + tbxId.Text + "'";
-                using (MySqlCommand myCmd = new MySqlCommand(sqlCmd, myConn))
+                DialogResult re = MessageBox.Show("确定删除:" + tbxName.Text + "?", "提示", MessageBoxButtons.OKCancel);
+                if(re == DialogResult.OK)
                 {
-                    myCmd.ExecuteNonQuery();
-                    MessageBox.Show("删除成功");
+                    myConn.Open();
+                    string sqlCmd = "delete from newperson where Id = '" + tbxId.Text + "'";
+                    using (MySqlCommand myCmd = new MySqlCommand(sqlCmd, myConn))
+                    {
+                        myCmd.ExecuteNonQuery();
+                        MessageBox.Show("删除成功");
+                    }
+                    myConn.Close();
                 }
-                myConn.Close();
+            }
+            else
+            {
+                MessageBox.Show("请选择想要删除的学生信息");
             }
             
         }
