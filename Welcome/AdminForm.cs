@@ -9,6 +9,10 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using MsWord = Microsoft.Office.Interop.Word;
+using System.Reflection;
+using System.Diagnostics;
+using System.IO;
 
 namespace Welcome
 {
@@ -23,18 +27,18 @@ namespace Welcome
             timer1.Enabled = true;
         }
 
-        public MySqlConnection DatabaseCon()
+        private void buttonStatusChange()//button状态转变
         {
-            string constr = "server=162.243.150.192;Uid=admin;password=admin123456;Database=NewPartner;Charset=utf8";
-            try
+            if (panel1.InvokeRequired || panel2.InvokeRequired)
             {
-                MySqlConnection mycon = new MySqlConnection(constr);
-                mycon.Open();
-                mycon.Close();
-                toolStripStatusLabel1.Text = "数据库连接成功";
-                foreach(Control ctr in panel1.Controls)
+                DelegateFunction df = new DelegateFunction(buttonStatusChange);
+                this.Invoke(df);
+            }
+            else
+            {
+                foreach (Control ctr in panel1.Controls)
                 {
-                    if(ctr is Button)
+                    if (ctr is Button)
                     {
                         ctr.Enabled = true;
                     }
@@ -46,6 +50,25 @@ namespace Welcome
                         ctr.Enabled = true;
                     }
                 }
+            }
+            
+        }
+
+        private MySqlConnection DatabaseCon()
+        {
+            string constr = "server=162.243.150.192;Uid=admin;password=admin123456;Database=NewPartner;Charset=utf8";
+            try
+            {
+                MySqlConnection mycon = new MySqlConnection(constr);
+                mycon.Open();
+                mycon.Close();
+                toolStripStatusLabel1.Text = "数据库连接成功";
+                Thread btsChange = new Thread(() =>
+                {
+                    buttonStatusChange();
+                });
+                btsChange.IsBackground = true;
+                btsChange.Start();
                 return mycon;
             }
             catch (Exception)
@@ -55,12 +78,13 @@ namespace Welcome
             }
         }
 
+        private delegate void DelegateFunction();//跨线程访问代理
+
         MySqlConnection myConn = new MySqlConnection();
         private void AdminForm_Load(object sender, EventArgs e)
         {
             try
             {
-                Control.CheckForIllegalCrossThreadCalls = false;
                 Thread ConDB = new Thread(() =>
                 {
                     myConn = DatabaseCon();
@@ -93,15 +117,32 @@ namespace Welcome
 
         private void flushList(string mySqlCmd)//刷新列表
         {
-            myConn.Open();
-            DataTable NewPerson = new DataTable();
-            MySqlDataAdapter disAdapter = new MySqlDataAdapter(mySqlCmd, myConn);
-            disAdapter.Fill(NewPerson);
-            dataGridView1.DataSource = NewPerson;
-            myConn.Close();
+            
+            if(dataGridView1.InvokeRequired)
+            {
+                
+                DelegateFunction df = new DelegateFunction(flushData);
+                this.Invoke(df);
+            }
+            else
+            {
+                try
+                {
+                    myConn.Open();
+                    DataTable NewPerson = new DataTable();
+                    MySqlDataAdapter disAdapter = new MySqlDataAdapter(mySqlCmd, myConn);
+                    disAdapter.Fill(NewPerson);
+                    dataGridView1.DataSource = NewPerson;
+                    myConn.Close();
+                }
+                catch(Exception ex)
+                {
+                    MessageBox.Show("列表刷新失败" + ex.ToString());
+                }
+            }
         }
 
-        private void flushData()//更新数据
+        private void flushData()//更新下拉菜单数据
         {
             flushList("select * from newperson");
             List<string> ProList = new List<string>();
@@ -295,6 +336,58 @@ namespace Welcome
             }
             Clipboard.SetText(contactInfo);
             MessageBox.Show("联系方式已经导入到剪切板");
+        }
+
+        private void button4_Click(object sender, EventArgs e)//导出报名表
+        {
+            if(dataGridView1.CurrentCell != null)
+            {
+                try
+                {
+                    SaveFileDialog sfDlg = new SaveFileDialog();
+                    sfDlg.FileName = dataGridView1.CurrentRow.Cells["ElabGroup"].Value.ToString() + "_" + dataGridView1.CurrentRow.Cells["Name"].Value.ToString() + "_报名表";
+                    sfDlg.Filter = "word文档|*.docx";
+                    sfDlg.RestoreDirectory = true;
+                    if(sfDlg.ShowDialog() == DialogResult.OK && sfDlg.FileName.Length > 0)
+                    {
+                        object oMissing = System.Reflection.Missing.Value;
+                        Microsoft.Office.Interop.Word._Application oWord = new Microsoft.Office.Interop.Word.Application();
+                        oWord.Visible = false;
+                        object oTemplate = Directory.GetCurrentDirectory() + "\\Template.dotx";
+                        Microsoft.Office.Interop.Word._Document oDoc = oWord.Documents.Add(ref oTemplate, ref oMissing, ref oMissing, ref oMissing);
+                        object[] oBookMark = new object[6];
+                        oBookMark[0] = "ElabGroup";
+                        oBookMark[1] = "Id";
+                        oBookMark[2] = "Name";
+                        oBookMark[3] = "Professor";
+                        oBookMark[4] = "Sex";
+                        oBookMark[5] = "Tel";
+                        oDoc.Bookmarks.get_Item(ref oBookMark[0]).Range.Text = dataGridView1.CurrentRow.Cells["ElabGroup"].Value.ToString();
+                        oDoc.Bookmarks.get_Item(ref oBookMark[1]).Range.Text = dataGridView1.CurrentRow.Cells["Id"].Value.ToString();
+                        oDoc.Bookmarks.get_Item(ref oBookMark[2]).Range.Text = dataGridView1.CurrentRow.Cells["Name"].Value.ToString();
+                        oDoc.Bookmarks.get_Item(ref oBookMark[3]).Range.Text = dataGridView1.CurrentRow.Cells["Professor"].Value.ToString();
+                        oDoc.Bookmarks.get_Item(ref oBookMark[4]).Range.Text = dataGridView1.CurrentRow.Cells["Sex"].Value.ToString();
+                        oDoc.Bookmarks.get_Item(ref oBookMark[5]).Range.Text = dataGridView1.CurrentRow.Cells["Tel"].Value.ToString();
+                        object fileName = sfDlg.FileName;
+                        oDoc.SaveAs(ref fileName, ref oMissing, ref oMissing, ref oMissing,
+                            ref oMissing, ref oMissing, ref oMissing, ref oMissing, ref oMissing,
+                            ref oMissing, ref oMissing, ref oMissing, ref oMissing, ref oMissing,
+                            ref oMissing, ref oMissing);
+                        oDoc.Close(ref oMissing, ref oMissing, ref oMissing);
+                        oWord.Quit(ref oMissing, ref oMissing, ref oMissing);
+                        MessageBox.Show("报名表已经保存到" + fileName);
+                    }
+                }
+                catch(Exception)
+                {
+                    MessageBox.Show("导出失败, 可能与office版本有关");
+                }
+            }
+            else
+            {
+                MessageBox.Show("请选择需要导出的信息");
+            }
+            
         }
     }
 
