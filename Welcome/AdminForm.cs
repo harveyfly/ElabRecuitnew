@@ -399,7 +399,7 @@ namespace Welcome
             }
             else
             {
-                MessageBox.Show("请选择一行信息", "提示 ", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("请至少选择一行信息", "提示 ", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
             
         }
