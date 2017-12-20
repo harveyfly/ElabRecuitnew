@@ -351,6 +351,7 @@ namespace Welcome
                     {
                         string filePath = fbd.SelectedPath.ToString();
                         progressBar.Refresh();
+                        progressBar.Value = 1;
                         progressBar.Visible = true;
                         progressBar.Minimum = 1;
                         progressBar.Maximum = dataGridView1.SelectedRows.Count;
