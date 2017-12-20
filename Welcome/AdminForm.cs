@@ -10,6 +10,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using MsWord = Microsoft.Office.Interop.Word;
+using Excel = Microsoft.Office.Interop.Excel;
 using System.Reflection;
 using System.Diagnostics;
 using System.IO;
@@ -109,7 +110,7 @@ namespace Welcome
             }
             catch(Exception ex)
             {
-                MessageBox.Show(ex.ToString());
+                MessageBox.Show(ex.ToString(), "提示", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 Application.Exit();
             }
             
@@ -137,7 +138,7 @@ namespace Welcome
                 }
                 catch(Exception ex)
                 {
-                    MessageBox.Show("列表刷新失败" + ex.ToString());
+                    MessageBox.Show("列表刷新失败" + ex.ToString(), "提示", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 }
             }
         }
@@ -208,7 +209,7 @@ namespace Welcome
             }
             else if(InBox.Value != "admin123456" && InBoxResult == DialogResult.OK)
             {
-                MessageBox.Show("密码错误");
+                MessageBox.Show("密码错误", "提示", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
 
@@ -260,7 +261,7 @@ namespace Welcome
             }
             else
             {
-                MessageBox.Show("查询数据不能为空");
+                MessageBox.Show("查询数据不能为空", "提示", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
 
@@ -278,7 +279,7 @@ namespace Welcome
         {
             if(tbxId.Text != "" && tbxName.Text != "")
             {
-                DialogResult re = MessageBox.Show("确定删除:" + tbxName.Text + "?", "提示", MessageBoxButtons.OKCancel);
+                DialogResult re = MessageBox.Show("确定删除:" + tbxName.Text + "?", "提示", MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
                 if(re == DialogResult.OK)
                 {
                     myConn.Open();
@@ -286,14 +287,14 @@ namespace Welcome
                     using (MySqlCommand myCmd = new MySqlCommand(sqlCmd, myConn))
                     {
                         myCmd.ExecuteNonQuery();
-                        MessageBox.Show("删除成功");
+                        MessageBox.Show("删除成功", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
                     myConn.Close();
                 }
             }
             else
             {
-                MessageBox.Show("请选择想要删除的学生信息");
+                MessageBox.Show("请选择想要删除的学生信息", "提示", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
             
         }
@@ -311,7 +312,7 @@ namespace Welcome
                 }
                 else if (InBox.Value != "admin123456" && InBoxResult == DialogResult.OK)
                 {
-                    MessageBox.Show("密码错误");
+                    MessageBox.Show("密码错误", "提示", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 }
             }
             else
@@ -335,59 +336,152 @@ namespace Welcome
                 contactInfo += dataGridView1.Rows[i].Cells["Tel"].Value.ToString() + ",";
             }
             Clipboard.SetText(contactInfo);
-            MessageBox.Show("联系方式已经导入到剪切板");
+            MessageBox.Show("联系方式已经导入到剪切板", "提示 ", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         private void button4_Click(object sender, EventArgs e)//导出报名表
         {
-            if(dataGridView1.CurrentCell != null)
+            if (dataGridView1.SelectedRows.Count > 0)
             {
                 try
                 {
-                    SaveFileDialog sfDlg = new SaveFileDialog();
-                    sfDlg.FileName = dataGridView1.CurrentRow.Cells["ElabGroup"].Value.ToString() + "_" + dataGridView1.CurrentRow.Cells["Name"].Value.ToString() + "_报名表";
-                    sfDlg.Filter = "word文档|*.docx";
-                    sfDlg.RestoreDirectory = true;
-                    if(sfDlg.ShowDialog() == DialogResult.OK && sfDlg.FileName.Length > 0)
+                    FolderBrowserDialog fbd = new FolderBrowserDialog();
+                    fbd.Description = "请选择需要导出到的文件夹";
+                    if (fbd.ShowDialog() == DialogResult.OK)
                     {
-                        object oMissing = System.Reflection.Missing.Value;
-                        Microsoft.Office.Interop.Word._Application oWord = new Microsoft.Office.Interop.Word.Application();
-                        oWord.Visible = false;
-                        object oTemplate = Directory.GetCurrentDirectory() + "\\Template.dotx";
-                        Microsoft.Office.Interop.Word._Document oDoc = oWord.Documents.Add(ref oTemplate, ref oMissing, ref oMissing, ref oMissing);
-                        object[] oBookMark = new object[6];
-                        oBookMark[0] = "ElabGroup";
-                        oBookMark[1] = "Id";
-                        oBookMark[2] = "Name";
-                        oBookMark[3] = "Professor";
-                        oBookMark[4] = "Sex";
-                        oBookMark[5] = "Tel";
-                        oDoc.Bookmarks.get_Item(ref oBookMark[0]).Range.Text = dataGridView1.CurrentRow.Cells["ElabGroup"].Value.ToString();
-                        oDoc.Bookmarks.get_Item(ref oBookMark[1]).Range.Text = dataGridView1.CurrentRow.Cells["Id"].Value.ToString();
-                        oDoc.Bookmarks.get_Item(ref oBookMark[2]).Range.Text = dataGridView1.CurrentRow.Cells["Name"].Value.ToString();
-                        oDoc.Bookmarks.get_Item(ref oBookMark[3]).Range.Text = dataGridView1.CurrentRow.Cells["Professor"].Value.ToString();
-                        oDoc.Bookmarks.get_Item(ref oBookMark[4]).Range.Text = dataGridView1.CurrentRow.Cells["Sex"].Value.ToString();
-                        oDoc.Bookmarks.get_Item(ref oBookMark[5]).Range.Text = dataGridView1.CurrentRow.Cells["Tel"].Value.ToString();
-                        object fileName = sfDlg.FileName;
-                        oDoc.SaveAs(ref fileName, ref oMissing, ref oMissing, ref oMissing,
-                            ref oMissing, ref oMissing, ref oMissing, ref oMissing, ref oMissing,
-                            ref oMissing, ref oMissing, ref oMissing, ref oMissing, ref oMissing,
-                            ref oMissing, ref oMissing);
-                        oDoc.Close(ref oMissing, ref oMissing, ref oMissing);
-                        oWord.Quit(ref oMissing, ref oMissing, ref oMissing);
-                        MessageBox.Show("报名表已经保存到" + fileName);
+                        string filePath = fbd.SelectedPath.ToString();
+                        progressBar.Refresh();
+                        progressBar.Visible = true;
+                        progressBar.Minimum = 1;
+                        progressBar.Maximum = dataGridView1.SelectedRows.Count;
+                        progressBar.Step = 1;
+                        for (int i = 0; i < dataGridView1.RowCount - 1; i++)
+                        {
+                            progressBar.PerformStep();
+                            if (dataGridView1.Rows[i].Selected)
+                            {
+                                object oMissing = System.Reflection.Missing.Value;
+                                MsWord._Application oWord = new MsWord.Application();
+                                oWord.Visible = false;
+                                object oTemplate = Directory.GetCurrentDirectory() + "\\Template.dotx";
+                                MsWord._Document oDoc = oWord.Documents.Add(ref oTemplate, ref oMissing, ref oMissing, ref oMissing);
+                                object[] oBookMark = new object[6];
+                                oBookMark[0] = "ElabGroup";
+                                oBookMark[1] = "Id";
+                                oBookMark[2] = "Name";
+                                oBookMark[3] = "Professor";
+                                oBookMark[4] = "Sex";
+                                oBookMark[5] = "Tel";
+                                oDoc.Bookmarks.get_Item(ref oBookMark[0]).Range.Text = dataGridView1.Rows[i].Cells["ElabGroup"].Value.ToString();
+                                oDoc.Bookmarks.get_Item(ref oBookMark[1]).Range.Text = dataGridView1.Rows[i].Cells["Id"].Value.ToString();
+                                oDoc.Bookmarks.get_Item(ref oBookMark[2]).Range.Text = dataGridView1.Rows[i].Cells["Name"].Value.ToString();
+                                oDoc.Bookmarks.get_Item(ref oBookMark[3]).Range.Text = dataGridView1.Rows[i].Cells["Professor"].Value.ToString();
+                                oDoc.Bookmarks.get_Item(ref oBookMark[4]).Range.Text = dataGridView1.Rows[i].Cells["Sex"].Value.ToString();
+                                oDoc.Bookmarks.get_Item(ref oBookMark[5]).Range.Text = dataGridView1.Rows[i].Cells["Tel"].Value.ToString();
+                                object fileName = filePath + "\\" + dataGridView1.Rows[i].Cells["ElabGroup"].Value.ToString() + "_" + dataGridView1.Rows[i].Cells["Name"].Value.ToString() + "_报名表.docx";
+                                oDoc.SaveAs(ref fileName, ref oMissing, ref oMissing, ref oMissing,
+                                    ref oMissing, ref oMissing, ref oMissing, ref oMissing, ref oMissing,
+                                    ref oMissing, ref oMissing, ref oMissing, ref oMissing, ref oMissing,
+                                    ref oMissing, ref oMissing);
+                                oDoc.Close(ref oMissing, ref oMissing, ref oMissing);
+                                oWord.Quit(ref oMissing, ref oMissing, ref oMissing);
+                            }
+                        }
+                        progressBar.Visible = false;
+                        MessageBox.Show("报名表已经保存到\n" + filePath, "提示 " ,MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
                 }
-                catch(Exception)
+                catch(Exception ex)
                 {
-                    MessageBox.Show("导出失败, 可能与office版本有关");
+                    MessageBox.Show("导出失败!\n\n" + ex.ToString(), "提示", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 }
             }
             else
             {
-                MessageBox.Show("请选择需要导出的信息");
+                MessageBox.Show("请选择一行信息", "提示 ", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
             
+        }
+
+        private void button1_Click(object sender, EventArgs e)//保存报名单
+        {
+            SaveFileDialog sfdlg = new SaveFileDialog();
+            sfdlg.FileName = DateTime.Now.ToString("yyyy") + "年电气创新实践基地招新报名表";
+            sfdlg.Filter = "Excel文档|*.xlsx ";
+            sfdlg.RestoreDirectory = true;
+            if(sfdlg.ShowDialog() == DialogResult.OK)
+            {
+                if(sfdlg.FileName != null)
+                {
+                    if (dataGridView1.RowCount <= 0)
+                    {
+                        MessageBox.Show("没有数据可供保存 ", "提示 ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        return;
+                    }
+                    Excel.Application objExcel = null;
+                    Excel.Workbook objWorkbook = null;
+                    Excel.Worksheet objsheet = null;
+                    try
+                    {
+                        objExcel = new Excel.Application();
+                        objWorkbook = objExcel.Workbooks.Add(Missing.Value);
+                        objsheet = (Excel.Worksheet)objWorkbook.ActiveSheet;
+
+                        int excelColumns = 1;
+                        for(int i = 0;i <= dataGridView1.ColumnCount -1;i ++)
+                        {
+                            if(dataGridView1.Columns[i].Visible)
+                            {
+                                objExcel.Cells[1, excelColumns] = dataGridView1.Columns[i].HeaderText.Trim();
+                                excelColumns++;
+                            }
+                        }
+                        for (int i = 0; i < dataGridView1.RowCount - 1; i++)
+                        {
+                            excelColumns = 1;
+                            for (int j = 0; j < dataGridView1.ColumnCount; j++)
+                            {
+                                if (dataGridView1.Columns[j].Visible == true)
+                                {
+                                    try
+                                    {
+                                        objExcel.Cells[i + 2, excelColumns] = dataGridView1.Rows[i].Cells[j].Value.ToString().Trim();
+                                        excelColumns++;
+                                    }
+                                    catch (Exception ex)
+                                    {
+                                        MessageBox.Show(ex.Message, "警告 ", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                                    }
+                                }
+                            }
+                        }
+                        objWorkbook.SaveAs(sfdlg.FileName, Missing.Value, Missing.Value, Missing.Value, Missing.Value,
+                                            Missing.Value, Excel.XlSaveAsAccessMode.xlShared, Missing.Value, Missing.Value, Missing.Value,
+                                            Missing.Value, Missing.Value);
+                    }
+                    catch(Exception ex)
+                    {
+                        MessageBox.Show(ex.Message, "警告 ", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        return;
+                    }
+                    finally
+                    {
+                        //关闭Excel应用      
+                        if (objWorkbook != null) objWorkbook.Close(Missing.Value, Missing.Value, Missing.Value);
+                        if (objExcel.Workbooks != null) objExcel.Workbooks.Close();
+                        if (objExcel != null) objExcel.Quit();
+
+                        objsheet = null;
+                        objWorkbook = null;
+                        objExcel = null;
+                    }
+                    MessageBox.Show(sfdlg.FileName + "\n\n导出完毕! ", "提示 ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                else
+                {
+                    MessageBox.Show("文件名不能为空！", "提示 ", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                }
+            }
         }
     }
 
