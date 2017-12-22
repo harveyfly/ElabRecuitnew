@@ -176,13 +176,23 @@ namespace Welcome
             {
                 string createStatement =
                     @"CREATE TABLE `newperson`(
-                       `Id` VARCHAR(9) NOT NULL,
-                       `Name` VARCHAR(20) NOT NULL,
-                       `Sex` SET('男','女'),
-                       `Tel` VARCHAR(11) NOT NULL,
-                       `ElabGroup` VARCHAR(10) NOT NULL,
-                       `Professor` VARCHAR(30) NOT NULL,
-                       PRIMARY KEY ( `Id` )
+                    `Id` VARCHAR(9) NOT NULL,
+                    `Name` VARCHAR(20) NOT NULL,
+                    `Sex` SET('男','女'),
+                    `Tel` VARCHAR(11) NOT NULL,
+                    `ElabGroup` VARCHAR(10) NOT NULL,
+                    `Professor` VARCHAR(30) NOT NULL,
+                    `Native` VARCHAR(10) NOT NULL,
+                    `DlutClass` VARCHAR(10) NOT NULL,
+                    `StuPosition` VARCHAR(10) NOT NULL,
+                    `Community` VARCHAR(15) NOT NULL,
+                    `FreeTime` VARCHAR(10) NOT NULL,
+                    `Email` VARCHAR(20) NOT NULL,
+                    `Experience` VARCHAR(200),
+                    `TimeWeek` VARCHAR(100),
+                    `Expect` VARCHAR(200),
+                    `SelfEvaluation` VARCHAR(300),
+                     PRIMARY KEY ( `Id` )
                     )ENGINE=InnoDB DEFAULT CHARSET=utf8;";
                 string dropStatement = "DROP TABLE newperson";
 
@@ -215,11 +225,14 @@ namespace Welcome
 
         private void RowDisplay()//更新显示
         {
-            tbxId.Text = dataGridView1.CurrentRow.Cells[0].Value.ToString();
-            tbxName.Text = dataGridView1.CurrentRow.Cells[1].Value.ToString();
-            cbxSex.Text = dataGridView1.CurrentRow.Cells[2].Value.ToString();
-            cbxPro.Text = dataGridView1.CurrentRow.Cells[5].Value.ToString();
-            cbxGro.Text = dataGridView1.CurrentRow.Cells[4].Value.ToString();
+            if(dataGridView1.Rows[0].Cells[0].Value != null)
+            {
+                tbxId.Text = dataGridView1.CurrentRow.Cells["Name"].Value.ToString();
+                tbxName.Text = dataGridView1.CurrentRow.Cells["Id"].Value.ToString();
+                cbxSex.Text = dataGridView1.CurrentRow.Cells["Sex"].Value.ToString();
+                cbxPro.Text = dataGridView1.CurrentRow.Cells["Professor"].Value.ToString();
+                cbxGro.Text = dataGridView1.CurrentRow.Cells["ElabGroup"].Value.ToString();
+            }
         }
 
         private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
@@ -366,19 +379,39 @@ namespace Welcome
                                 oWord.Visible = false;
                                 object oTemplate = Directory.GetCurrentDirectory() + "\\Template.dotx";
                                 MsWord._Document oDoc = oWord.Documents.Add(ref oTemplate, ref oMissing, ref oMissing, ref oMissing);
-                                object[] oBookMark = new object[6];
-                                oBookMark[0] = "ElabGroup";
-                                oBookMark[1] = "Id";
-                                oBookMark[2] = "Name";
-                                oBookMark[3] = "Professor";
-                                oBookMark[4] = "Sex";
-                                oBookMark[5] = "Tel";
-                                oDoc.Bookmarks.get_Item(ref oBookMark[0]).Range.Text = dataGridView1.Rows[i].Cells["ElabGroup"].Value.ToString();
-                                oDoc.Bookmarks.get_Item(ref oBookMark[1]).Range.Text = dataGridView1.Rows[i].Cells["Id"].Value.ToString();
-                                oDoc.Bookmarks.get_Item(ref oBookMark[2]).Range.Text = dataGridView1.Rows[i].Cells["Name"].Value.ToString();
-                                oDoc.Bookmarks.get_Item(ref oBookMark[3]).Range.Text = dataGridView1.Rows[i].Cells["Professor"].Value.ToString();
-                                oDoc.Bookmarks.get_Item(ref oBookMark[4]).Range.Text = dataGridView1.Rows[i].Cells["Sex"].Value.ToString();
-                                oDoc.Bookmarks.get_Item(ref oBookMark[5]).Range.Text = dataGridView1.Rows[i].Cells["Tel"].Value.ToString();
+                                object[] oBookMark = new object[16];
+                                oBookMark[0] = "Community";
+                                oBookMark[1] = "DlutClass";
+                                oBookMark[2] = "ElabGroup";
+                                oBookMark[3] = "Email";
+                                oBookMark[4] = "Expect";
+                                oBookMark[5] = "Experience";
+                                oBookMark[6] = "FreeTime";
+                                oBookMark[7] = "Id";
+                                oBookMark[8] = "Name";
+                                oBookMark[9] = "Native";
+                                oBookMark[10] = "Professor";
+                                oBookMark[11] = "SelfEvaluation";
+                                oBookMark[12] = "Sex";
+                                oBookMark[13] = "StuPosition";
+                                oBookMark[14] = "Tel";
+                                oBookMark[15] = "TimeWeek";
+                                oDoc.Bookmarks.get_Item(ref oBookMark[0]).Range.Text = dataGridView1.Rows[i].Cells["Community"].Value.ToString();
+                                oDoc.Bookmarks.get_Item(ref oBookMark[1]).Range.Text = dataGridView1.Rows[i].Cells["DlutClass"].Value.ToString();
+                                oDoc.Bookmarks.get_Item(ref oBookMark[2]).Range.Text = dataGridView1.Rows[i].Cells["ElabGroup"].Value.ToString();
+                                oDoc.Bookmarks.get_Item(ref oBookMark[3]).Range.Text = dataGridView1.Rows[i].Cells["Email"].Value.ToString();
+                                oDoc.Bookmarks.get_Item(ref oBookMark[4]).Range.Text = dataGridView1.Rows[i].Cells["Expect"].Value.ToString();
+                                oDoc.Bookmarks.get_Item(ref oBookMark[5]).Range.Text = dataGridView1.Rows[i].Cells["Experience"].Value.ToString();
+                                oDoc.Bookmarks.get_Item(ref oBookMark[6]).Range.Text = dataGridView1.Rows[i].Cells["Freetime"].Value.ToString();
+                                oDoc.Bookmarks.get_Item(ref oBookMark[7]).Range.Text = dataGridView1.Rows[i].Cells["Id"].Value.ToString();
+                                oDoc.Bookmarks.get_Item(ref oBookMark[8]).Range.Text = dataGridView1.Rows[i].Cells["Name"].Value.ToString();
+                                oDoc.Bookmarks.get_Item(ref oBookMark[9]).Range.Text = dataGridView1.Rows[i].Cells["Native"].Value.ToString();
+                                oDoc.Bookmarks.get_Item(ref oBookMark[10]).Range.Text = dataGridView1.Rows[i].Cells["Professor"].Value.ToString();
+                                oDoc.Bookmarks.get_Item(ref oBookMark[11]).Range.Text = dataGridView1.Rows[i].Cells["SelfEvaluation"].Value.ToString();
+                                oDoc.Bookmarks.get_Item(ref oBookMark[12]).Range.Text = dataGridView1.Rows[i].Cells["Sex"].Value.ToString();
+                                oDoc.Bookmarks.get_Item(ref oBookMark[13]).Range.Text = dataGridView1.Rows[i].Cells["StuPosition"].Value.ToString();
+                                oDoc.Bookmarks.get_Item(ref oBookMark[14]).Range.Text = dataGridView1.Rows[i].Cells["Tel"].Value.ToString();
+                                oDoc.Bookmarks.get_Item(ref oBookMark[15]).Range.Text = dataGridView1.Rows[i].Cells["TimeWeek"].Value.ToString();
                                 object fileName = filePath + "\\" + dataGridView1.Rows[i].Cells["ElabGroup"].Value.ToString() + "_" + dataGridView1.Rows[i].Cells["Name"].Value.ToString() + "_报名表.docx";
                                 oDoc.SaveAs(ref fileName, ref oMissing, ref oMissing, ref oMissing,
                                     ref oMissing, ref oMissing, ref oMissing, ref oMissing, ref oMissing,

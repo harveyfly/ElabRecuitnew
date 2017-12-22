@@ -207,7 +207,7 @@
             this.panel2.Dock = System.Windows.Forms.DockStyle.Left;
             this.panel2.Location = new System.Drawing.Point(0, 120);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(272, 671);
+            this.panel2.Size = new System.Drawing.Size(275, 671);
             this.panel2.TabIndex = 6;
             this.panel2.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.panel2_MouseDoubleClick);
             // 
@@ -387,7 +387,7 @@
             // splitter1
             // 
             this.splitter1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.splitter1.Location = new System.Drawing.Point(272, 120);
+            this.splitter1.Location = new System.Drawing.Point(275, 120);
             this.splitter1.Name = "splitter1";
             this.splitter1.Size = new System.Drawing.Size(5, 671);
             this.splitter1.TabIndex = 7;
