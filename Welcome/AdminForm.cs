@@ -227,8 +227,8 @@ namespace Welcome
         {
             if(dataGridView1.Rows[0].Cells[0].Value != null)
             {
-                tbxId.Text = dataGridView1.CurrentRow.Cells["Name"].Value.ToString();
-                tbxName.Text = dataGridView1.CurrentRow.Cells["Id"].Value.ToString();
+                tbxId.Text = dataGridView1.CurrentRow.Cells["Id"].Value.ToString();
+                tbxName.Text = dataGridView1.CurrentRow.Cells["Name"].Value.ToString();
                 cbxSex.Text = dataGridView1.CurrentRow.Cells["Sex"].Value.ToString();
                 cbxPro.Text = dataGridView1.CurrentRow.Cells["Professor"].Value.ToString();
                 cbxGro.Text = dataGridView1.CurrentRow.Cells["ElabGroup"].Value.ToString();
