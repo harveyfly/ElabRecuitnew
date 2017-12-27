@@ -194,27 +194,27 @@ namespace Welcome
                     `SelfEvaluation` VARCHAR(300),
                      PRIMARY KEY ( `Id` )
                     )ENGINE=InnoDB DEFAULT CHARSET=utf8;";
-                string dropStatement = "DROP TABLE newperson";
+                string dropStatement = "truncate table newperson";
 
                 try
                 {
                     myConn.Open();
-                    // 建立新表  
+                    // 建立新表
                     using (MySqlCommand cmdDrop = new MySqlCommand(dropStatement, myConn))
                     {
                         cmdDrop.ExecuteNonQuery();
-                        toolStripStatusLabel1.Text = "删除成功";
-                    }
-                    using (MySqlCommand cmdCreate = new MySqlCommand(createStatement, myConn))
-                    {
-                        cmdCreate.ExecuteNonQuery();
                         toolStripStatusLabel1.Text = "数据表建立成功";
                     }
                     myConn.Close();
                 }
                 catch
                 {
-                    toolStripStatusLabel1.Text = "数据表建立失败";
+                    toolStripStatusLabel1.Text = "数据表不存在，正在新建...";
+                    using (MySqlCommand cmdDrop = new MySqlCommand(createStatement, myConn))
+                    {
+                        cmdDrop.ExecuteNonQuery();
+                        toolStripStatusLabel1.Text = "数据表建立成功";
+                    }
                 }
             }
             else if(InBox.Value != "admin123456" && InBoxResult == DialogResult.OK)
@@ -462,7 +462,7 @@ namespace Welcome
                         objsheet = (Excel.Worksheet)objWorkbook.ActiveSheet;
 
                         int excelColumns = 1;
-                        for(int i = 0;i <= dataGridView1.ColumnCount -1;i ++)
+                        for(int i = 0;i < 6;i ++)
                         {
                             if(dataGridView1.Columns[i].Visible)
                             {
@@ -473,7 +473,7 @@ namespace Welcome
                         for (int i = 0; i < dataGridView1.RowCount - 1; i++)
                         {
                             excelColumns = 1;
-                            for (int j = 0; j < dataGridView1.ColumnCount; j++)
+                            for (int j = 0; j < 6; j++)
                             {
                                 if (dataGridView1.Columns[j].Visible == true)
                                 {
