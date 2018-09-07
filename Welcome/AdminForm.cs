@@ -684,5 +684,88 @@ namespace Welcome
             }
 
         }
+
+        private void button10_Click(object sender, EventArgs e) //导出签到信息
+        {
+            SaveFileDialog sfdlg = new SaveFileDialog();
+            sfdlg.FileName = "第" + cbxWeek.Text + "周签到时间表";
+            sfdlg.Filter = "Excel文档|*.xlsx ";
+            sfdlg.RestoreDirectory = true;
+            flushList("SELECT `学号`,`姓名`,`性别`,`组别`,`周次`,`时长` FROM TimeWeek WHERE `周次`='" + cbxWeek.Text + "';", elabConn);
+            if (sfdlg.ShowDialog() == DialogResult.OK)
+            {
+                if (sfdlg.FileName != null)
+                {
+                    if (dataGridView1.RowCount <= 0)
+                    {
+                        MessageBox.Show("没有数据可供保存 ", "提示 ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        return;
+                    }
+                    Excel.Application objExcel = null;
+                    Excel.Workbook objWorkbook = null;
+                    Excel.Worksheet objsheet = null;
+                    try
+                    {
+                        objExcel = new Excel.Application();
+                        objWorkbook = objExcel.Workbooks.Add(Missing.Value);
+                        objsheet = (Excel.Worksheet)objWorkbook.ActiveSheet;
+
+                        int excelColumns = 1;
+                        for (int i = 0; i < 6; i++)
+                        {
+                            if (dataGridView1.Columns[i].Visible)
+                            {
+                                objExcel.Cells[1, excelColumns] = dataGridView1.Columns[i].HeaderText.Trim();
+                                excelColumns++;
+                            }
+                        }
+                        for (int i = 0; i < dataGridView1.RowCount - 1; i++)
+                        {
+                            excelColumns = 1;
+                            for (int j = 0; j < 6; j++)
+                            {
+                                if (dataGridView1.Columns[j].Visible == true)
+                                {
+                                    try
+                                    {
+                                        objExcel.Cells[i + 2, excelColumns] = dataGridView1.Rows[i].Cells[j].Value.ToString().Trim();
+                                        excelColumns++;
+                                    }
+                                    catch (Exception ex)
+                                    {
+                                        MessageBox.Show(ex.Message, "警告 ", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                                    }
+                                }
+                            }
+                        }
+                        objWorkbook.SaveAs(sfdlg.FileName, Missing.Value, Missing.Value, Missing.Value, Missing.Value,
+                                            Missing.Value, Excel.XlSaveAsAccessMode.xlShared, Missing.Value, Missing.Value, Missing.Value,
+                                            Missing.Value, Missing.Value);
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(ex.Message, "警告 ", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        return;
+                    }
+                    finally
+                    {
+                        //关闭Excel应用      
+                        if (objWorkbook != null) objWorkbook.Close(Missing.Value, Missing.Value, Missing.Value);
+                        if (objExcel.Workbooks != null) objExcel.Workbooks.Close();
+                        if (objExcel != null) objExcel.Quit();
+
+                        objsheet = null;
+                        objWorkbook = null;
+                        objExcel = null;
+                    }
+                    MessageBox.Show(sfdlg.FileName + "\n\n导出完毕! ", "提示 ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                else
+                {
+                    MessageBox.Show("文件名不能为空！", "提示 ", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                }
+            }
+
+        }
     }
 }

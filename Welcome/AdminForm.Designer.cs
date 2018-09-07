@@ -45,6 +45,9 @@
             this.toolStripStatusLabel2 = new System.Windows.Forms.ToolStripStatusLabel();
             this.panel2 = new System.Windows.Forms.Panel();
             this.panel7 = new System.Windows.Forms.Panel();
+            this.label7 = new System.Windows.Forms.Label();
+            this.label6 = new System.Windows.Forms.Label();
+            this.cbxWeek = new System.Windows.Forms.ComboBox();
             this.button10 = new System.Windows.Forms.Button();
             this.button9 = new System.Windows.Forms.Button();
             this.button11 = new System.Windows.Forms.Button();
@@ -68,9 +71,6 @@
             this.tbxId = new System.Windows.Forms.TextBox();
             this.panel3 = new System.Windows.Forms.Panel();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
-            this.cbxWeek = new System.Windows.Forms.ComboBox();
-            this.label6 = new System.Windows.Forms.Label();
-            this.label7 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.panel1.SuspendLayout();
             this.panel4.SuspendLayout();
@@ -261,6 +261,45 @@
             this.panel7.Size = new System.Drawing.Size(335, 348);
             this.panel7.TabIndex = 19;
             // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Font = new System.Drawing.Font("微软雅黑", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label7.Location = new System.Drawing.Point(110, 42);
+            this.label7.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(28, 24);
+            this.label7.TabIndex = 18;
+            this.label7.Text = "周";
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Font = new System.Drawing.Font("微软雅黑", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label6.Location = new System.Drawing.Point(13, 42);
+            this.label6.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(28, 24);
+            this.label6.TabIndex = 17;
+            this.label6.Text = "第";
+            // 
+            // cbxWeek
+            // 
+            this.cbxWeek.Font = new System.Drawing.Font("微软雅黑", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.cbxWeek.FormattingEnabled = true;
+            this.cbxWeek.Items.AddRange(new object[] {
+            "1",
+            "2",
+            "3",
+            "4",
+            "5"});
+            this.cbxWeek.Location = new System.Drawing.Point(49, 38);
+            this.cbxWeek.Margin = new System.Windows.Forms.Padding(4);
+            this.cbxWeek.Name = "cbxWeek";
+            this.cbxWeek.Size = new System.Drawing.Size(53, 31);
+            this.cbxWeek.TabIndex = 16;
+            this.cbxWeek.Text = "1";
+            // 
             // button10
             // 
             this.button10.Font = new System.Drawing.Font("微软雅黑", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
@@ -271,6 +310,7 @@
             this.button10.TabIndex = 13;
             this.button10.Text = "导出签到信息";
             this.button10.UseVisualStyleBackColor = true;
+            this.button10.Click += new System.EventHandler(this.button10_Click);
             // 
             // button9
             // 
@@ -521,45 +561,6 @@
             // timer1
             // 
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
-            // 
-            // cbxWeek
-            // 
-            this.cbxWeek.Font = new System.Drawing.Font("微软雅黑", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.cbxWeek.FormattingEnabled = true;
-            this.cbxWeek.Items.AddRange(new object[] {
-            "1",
-            "2",
-            "3",
-            "4",
-            "5"});
-            this.cbxWeek.Location = new System.Drawing.Point(49, 38);
-            this.cbxWeek.Margin = new System.Windows.Forms.Padding(4);
-            this.cbxWeek.Name = "cbxWeek";
-            this.cbxWeek.Size = new System.Drawing.Size(53, 31);
-            this.cbxWeek.TabIndex = 16;
-            this.cbxWeek.Text = "1";
-            // 
-            // label6
-            // 
-            this.label6.AutoSize = true;
-            this.label6.Font = new System.Drawing.Font("微软雅黑", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label6.Location = new System.Drawing.Point(13, 42);
-            this.label6.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(28, 24);
-            this.label6.TabIndex = 17;
-            this.label6.Text = "第";
-            // 
-            // label7
-            // 
-            this.label7.AutoSize = true;
-            this.label7.Font = new System.Drawing.Font("微软雅黑", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label7.Location = new System.Drawing.Point(110, 42);
-            this.label7.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(28, 24);
-            this.label7.TabIndex = 18;
-            this.label7.Text = "周";
             // 
             // AdminForm
             // 
